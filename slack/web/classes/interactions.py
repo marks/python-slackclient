@@ -79,10 +79,7 @@ class DialogInteractiveEvent(InteractiveEvent):
         self.callback_id = event["callback_id"]
         self.event_type = event["type"]
         self.submission = event["submission"]
-        if event["state"]:
-            self.state = json.loads(event["state"])
-        else:
-            self.state = {}
+        self.state = json.loads(event["state"]) if event["state"] else {}
 
     def require_any(self, requirements: List[str]) -> dict:
         """
@@ -94,12 +91,9 @@ class DialogInteractiveEvent(InteractiveEvent):
         """
         if any(self.submission.get(requirement, "") for requirement in requirements):
             return {}
-        else:
-            errors = []
-            for key in self.submission:
-                error_text = "At least one value is required"
-                errors.append({"name": key, "error": error_text})
-            return {"errors": errors}
+        error_text = "At least one value is required"
+        errors = [{"name": key, "error": error_text} for key in self.submission]
+        return {"errors": errors}
 
 
 class SlashCommandInteractiveEvent(InteractiveEvent):
