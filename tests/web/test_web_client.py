@@ -83,7 +83,7 @@ class TestWebClient(unittest.TestCase):
 
         users = []
         for page in self.client.users_list(limit=2):
-            users = users + page["members"]
+            users += page["members"]
         self.assertTrue(len(users) == 4)
 
     def test_request_pagination_stops_when_next_cursor_is_missing(self, mock_request):
@@ -102,7 +102,7 @@ class TestWebClient(unittest.TestCase):
 
         users = []
         for page in self.client.users_list(limit=2):
-            users = users + page["members"]
+            users += page["members"]
         self.assertTrue(len(users) == 2)
         mock_request.assert_called_once_with(
             http_verb="GET",

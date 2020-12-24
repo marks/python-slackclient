@@ -259,8 +259,7 @@ class BaseClient:
             v=sys.version_info
         )
         system_info = "{0}/{1}".format(platform.system(), platform.release())
-        user_agent_string = " ".join([python_version, client, system_info])
-        return user_agent_string
+        return " ".join([python_version, client, system_info])
 
     @staticmethod
     def validate_slack_signature(

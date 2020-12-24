@@ -181,9 +181,8 @@ class SlackResponse(object):
         Returns:
             A boolean value.
         """
-        present = (
+        return (
             "response_metadata" in data
             and "next_cursor" in data["response_metadata"]
             and data["response_metadata"]["next_cursor"] != ""
         )
-        return present

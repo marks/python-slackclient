@@ -9,7 +9,7 @@ from slack.web.slack_response import SlackResponse
 
 
 def fake_req_args(headers=ANY, data=ANY, params=ANY, json=ANY):
-    req_args = {
+    return {
         "headers": headers,
         "data": data,
         "params": params,
@@ -17,11 +17,10 @@ def fake_req_args(headers=ANY, data=ANY, params=ANY, json=ANY):
         "ssl": ANY,
         "proxy": ANY,
     }
-    return req_args
 
 
 def fake_send_req_args(headers=ANY, data=ANY, params=ANY, json=ANY):
-    req_args = {
+    return {
         "headers": headers,
         "data": data,
         "params": params,
@@ -30,7 +29,6 @@ def fake_send_req_args(headers=ANY, data=ANY, params=ANY, json=ANY):
         "proxy": ANY,
         "files": ANY,
     }
-    return req_args
 
 
 def mock_rtm_response():

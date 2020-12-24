@@ -61,10 +61,7 @@ class DialogBuilder(JsonObject):
             state: Extra state information that you need to pass from this dialog
                 back to your application on submission
         """
-        if isinstance(state, dict):
-            self._state = dumps(state)
-        else:
-            self._state = state
+        self._state = dumps(state) if isinstance(state, dict) else state
         return self
 
     def callback_id(self, callback_id: str) -> "DialogBuilder":

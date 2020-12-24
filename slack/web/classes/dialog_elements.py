@@ -187,16 +187,13 @@ class AbstractDialogSelector(JsonObject, metaclass=ABCMeta):
 
     def to_dict(self) -> dict:
         json = super().to_dict()
-        if self.data_source == "external":
-            if isinstance(self.value, Option):
+        if isinstance(self.value, Option):
+            if self.data_source == "external":
                 json["selected_options"] = extract_json([self.value], "dialog")
-            elif self.value is not None:
-                json["selected_options"] = Option.from_single_value(self.value)
-        else:
-            if isinstance(self.value, Option):
+            else:
                 json["value"] = self.value.value
-            elif self.value is not None:
-                json["value"] = self.value
+        elif self.value is not None:
+            json["selected_options"] = Option.from_single_value(self.value)
         return json
 
 

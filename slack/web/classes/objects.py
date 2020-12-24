@@ -23,10 +23,7 @@ class Link(BaseObject):
         self.text = text
 
     def __str__(self):
-        if self.text:
-            separator = "|"
-        else:
-            separator = ""
+        separator = "|" if self.text else ""
         return f"<{self.url}{separator}{self.text}>"
 
 
@@ -57,14 +54,8 @@ class DateLink(Link):
             fallback: text to display on clients that don't support date rendering
             link: an optional URL to hyperlink to with this date
         """
-        if isinstance(date, datetime):
-            epoch = int(date.timestamp())
-        else:
-            epoch = date
-        if link is not None:
-            link = f"^{link}"
-        else:
-            link = ""
+        epoch = int(date.timestamp()) if isinstance(date, datetime) else date
+        link = f"^{link}" if link is not None else ""
         super().__init__(url=f"{epoch}^{date_format}{link}", text=fallback)
 
 
@@ -272,18 +263,17 @@ class ConfirmObject(JsonObject):
                 "ok_text": self.confirm if self.confirm != "Yes" else "Okay",
                 "dismiss_text": self.deny if self.deny != "No" else "Cancel",
             }
+        self.validate_json()
+        json = {
+            "title": PlainTextObject.direct_from_string(self.title),
+            "confirm": PlainTextObject.direct_from_string(self.confirm),
+            "deny": PlainTextObject.direct_from_string(self.deny),
+        }
+        if isinstance(self.text, TextObject):
+            json["text"] = self.text.to_dict()
         else:
-            self.validate_json()
-            json = {
-                "title": PlainTextObject.direct_from_string(self.title),
-                "confirm": PlainTextObject.direct_from_string(self.confirm),
-                "deny": PlainTextObject.direct_from_string(self.deny),
-            }
-            if isinstance(self.text, TextObject):
-                json["text"] = self.text.to_dict()
-            else:
-                json["text"] = MarkdownTextObject.direct_from_string(self.text)
-            return json
+            json["text"] = MarkdownTextObject.direct_from_string(self.text)
+        return json
 
 
 class Option(JsonObject):
